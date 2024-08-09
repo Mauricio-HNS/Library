@@ -1,0 +1,75 @@
+﻿# .NET Core
+bin/
+obj/
+project.lock.json
+project.fragment.lock.json
+*.db
+*.sqlite
+*.log
+
+# ASP.NET Core
+wwwroot/
+*.csproj.user
+*.csproj.g.user
+*.suo
+*.user
+*.userosscache
+*.suo
+*.sln.docstates
+*.vs/
+*.vscode/
+
+# Visual Studio
+.vs/
+*.ncb
+*.suo
+*.user
+*.userosscache
+*.suo
+
+# Rider
+.idea/
+
+# MacOS
+.DS_Store
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Node.js
+node_modules/
+
+# NPM
+npm-debug.log
+
+# Environment Files
+.env
+.env.*
+
+# Secret files
+secrets/
+
+# Docker
+*.dockerfile
+*.dockerignore
+
+# JetBrains Rider
+.idea/
+*.suo
+*.sln.docstates
+*.user
+*.userosscache
+
+# ASP.NET
+*.pidb
+*.svclog
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+
+# Auto-generated files
+*.g.cs
+*.g.i.cs

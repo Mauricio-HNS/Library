@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Projetos\\Biblioteca\\Biblioteca\\Biblioteca.csproj": {}
+    "C:\\Projetos\\Library\\Biblioteca.csproj": {}
   },
   "projects": {
-    "C:\\Projetos\\Biblioteca\\Biblioteca\\Biblioteca.csproj": {
+    "C:\\Projetos\\Library\\Biblioteca.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Projetos\\Biblioteca\\Biblioteca\\Biblioteca.csproj",
+        "projectUniqueName": "C:\\Projetos\\Library\\Biblioteca.csproj",
         "projectName": "Biblioteca",
-        "projectPath": "C:\\Projetos\\Biblioteca\\Biblioteca\\Biblioteca.csproj",
+        "projectPath": "C:\\Projetos\\Library\\Biblioteca.csproj",
         "packagesPath": "C:\\Users\\mauri\\.nuget\\packages\\",
-        "outputPath": "C:\\Projetos\\Biblioteca\\Biblioteca\\obj\\",
+        "outputPath": "C:\\Projetos\\Library\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\mauri\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -45,6 +45,12 @@
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
+          "dependencies": {
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[8.0.7, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
