@@ -1,26 +1,30 @@
-﻿@model Library.Models.ManageLoginsViewModel
-@using Microsoft.Owin.Security
+﻿@model Biblioteca.Models.ManageLoginsViewModel
+@using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+
 @{
     ViewBag.Title = "Manage your external logins";
 }
 
-<h2>@ViewBag.Title.</h2>
+<h2>@ViewBag.Title</h2>
 
 <p class="text-success">@ViewBag.StatusMessage</p>
+
 @{
-    var loginProviders = Context.GetOwinContext().Authentication.GetExternalAuthenticationTypes();
-    if (loginProviders.Count() == 0)
+    var loginProviders = await SignInManager.GetExternalAuthenticationSchemesAsync();
+    if (!loginProviders.Any())
     {
         <div>
             <p>
-                There are no external authentication services configured. See <a href="http://go.microsoft.com/fwlink/?LinkId=313242">this article</a>
-                for details on setting up this ASP.NET application to support logging in via external services.
+                There are no external authentication services configured. See <a href="https://docs.microsoft.com/aspnet/core/security/authentication/social/?view=aspnetcore-6.0">this article</a>
+                for details on setting up this ASP.NET Core application to support logging in via external services.
             </p>
         </div>
     }
     else
     {
-        if (Model.CurrentLogins.Count > 0)
+        if (Model.CurrentLogins.Any())
         {
             <h4>Registered Logins</h4>
             <table class="table">
@@ -32,7 +36,7 @@
                             <td>
                                 @if (ViewBag.ShowRemoveButton)
                                 {
-                                    using (Html.BeginForm("RemoveLogin", "Manage"))
+                                    using (Html.BeginForm("RemoveLogin", "Manage", FormMethod.Post))
                                     {
                                         @Html.AntiForgeryToken()
                                         <div>
@@ -52,16 +56,16 @@
                 </tbody>
             </table>
         }
-        if (Model.OtherLogins.Count > 0)
+        if (Model.OtherLogins.Any())
         {
-            using (Html.BeginForm("LinkLogin", "Manage"))
+            using (Html.BeginForm("LinkLogin", "Manage", FormMethod.Post))
             {
                 @Html.AntiForgeryToken()
                 <div id="socialLoginList">
                     <p>
-                        @foreach (AuthenticationDescription p in Model.OtherLogins)
+                        @foreach (var provider in Model.OtherLogins)
                         {
-                            <button type="submit" class="btn btn-default" id="@p.AuthenticationType" name="provider" value="@p.AuthenticationType" title="Log in using your @p.Caption account">@p.AuthenticationType</button>
+                            <button type="submit" class="btn btn-default" id="@provider.Name" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
                         }
                     </p>
                 </div>

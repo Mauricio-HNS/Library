@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
-using System.Web.Mvc;
+
 
 namespace Biblioteca.ModelView
 {
@@ -21,7 +21,7 @@ namespace Biblioteca.ModelView
         public int CategoryId { get; set; }
         public DateTime Date { get; set; }
         [Required]
-        [Index(IsUnique = true)]
+        //[Index(IsUnique = true)]
         public int ISBN { get; set; }
         public bool Available { get; set; }
         public IEnumerable<SelectListItem> Categories { get; set; }

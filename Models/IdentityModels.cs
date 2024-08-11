@@ -16,7 +16,8 @@ namespace Biblioteca.Models
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
             // Criação de identidade com as reivindicações padrão do ASP.NET Core Identity
-            var userIdentity = await manager.CreateAsync(this);
+            var claims = await manager.GetClaimsAsync(this);
+            var userIdentity = new ClaimsIdentity(claims, IdentityConstants.ApplicationScheme);
 
             // Adicione reivindicações personalizadas aqui, se necessário
             // Exemplo:

@@ -1,127 +1,146 @@
-﻿using Biblioteca.Models;
+﻿using Biblioteca.Data;
+using Biblioteca.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Data;
-using System.Net;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Biblioteca.Controllers
 {
     public class CategoriesController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private readonly ApplicationDbContext _db;
+
+        public CategoriesController(ApplicationDbContext db)
+        {
+            _db = db;
+        }
 
         // GET: Categories
-        public ActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View(db.Categories.ToList());
+            var categories = await _db.Categories.ToListAsync();
+            return View(categories);
         }
 
-        public ActionResult Books(int? id)
-        {
-            var model = db.Books.Where(b => b.CategoryId == id);
-            return View(model);
-        }
-
-        // GET: Categories/Details/5
-        public ActionResult Details(int? id)
+        public async Task<IActionResult> Books(int? id)
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return NotFound();
             }
-            Category category = db.Categories.Find(id);
+
+            var books = _db.Books.Where(b => b.CategoryId == id);
+            return View(await books.ToListAsync());
+        }
+
+        // GET: Categories/Details/5
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return BadRequest();
+            }
+
+            var category = await _db.Categories.FindAsync(id);
             if (category == null)
             {
-                return HttpNotFound();
+                return NotFound();
             }
+
             return View(category);
         }
 
         // GET: Categories/Create
-        public ActionResult Create()
+        public IActionResult Create()
         {
             return View();
         }
 
         // POST: Categories/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "CategoryId,Name")] Category category)
+        public async Task<IActionResult> Create([Bind("CategoryId,Name")] Category category)
         {
             if (ModelState.IsValid)
             {
-                db.Categories.Add(category);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                _db.Categories.Add(category);
+                await _db.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
             }
 
             return View(category);
         }
 
         // GET: Categories/Edit/5
-        public ActionResult Edit(int? id)
+        public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return BadRequest();
             }
-            Category category = db.Categories.Find(id);
+
+            var category = await _db.Categories.FindAsync(id);
             if (category == null)
             {
-                return HttpNotFound();
+                return NotFound();
             }
+
             return View(category);
         }
 
         // POST: Categories/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "CategoryId,Name")] Category category)
+        public async Task<IActionResult> Edit([Bind("CategoryId,Name")] Category category)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(category).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                _db.Entry(category).State = EntityState.Modified;
+                await _db.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
             }
+
             return View(category);
         }
 
         // GET: Categories/Delete/5
-        public ActionResult Delete(int? id)
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return BadRequest();
             }
-            Category category = db.Categories.Find(id);
+
+            var category = await _db.Categories.FindAsync(id);
             if (category == null)
             {
-                return HttpNotFound();
+                return NotFound();
             }
+
             return View(category);
         }
 
         // POST: Categories/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            Category category = db.Categories.Find(id);
-            db.Categories.Remove(category);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            var category = await _db.Categories.FindAsync(id);
+            if (category != null)
+            {
+                _db.Categories.Remove(category);
+                await _db.SaveChangesAsync();
+            }
+
+            return RedirectToAction(nameof(Index));
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                db.Dispose();
+                _db.Dispose();
             }
             base.Dispose(disposing);
         }
